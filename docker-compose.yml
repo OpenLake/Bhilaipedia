@@ -1,0 +1,20 @@
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: bhilaipedia
+      MYSQL_USER: bhilaipedia
+      MYSQL_PASSWORD: bhilaipedia
+      MYSQL_ROOT_PASSWORD: bhilaipedia
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  mediawiki:
+    image: mediawiki
+    ports:
+      - 8080:80
+    links:
+      - database
+    volumes:
+      - ./mediawiki_data:/var/www/html/images
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php # This line is commented out initially

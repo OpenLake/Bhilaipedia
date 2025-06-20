@@ -17,4 +17,4 @@ services:
       - database
     volumes:
       - ./mediawiki_data:/var/www/html/images
-      - ./LocalSettings.php:/var/www/html/LocalSettings.php # This line is commented out initially
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php  

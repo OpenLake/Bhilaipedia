@@ -79,7 +79,7 @@ $wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
-$wgEnableUploads = false;
+$wgEnableUploads = true;
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 
@@ -98,7 +98,7 @@ $wgLanguageCode = "en";
 $wgLocaltimezone = "UTC";
 
 $wgGroupPermissions['*']['read']            = true;
-$wgGroupPermissions['*']['createaccount']   = false;
+$wgGroupPermissions['*']['createaccount']   = true;
 $wgGroupPermissions['*']['edit']            = false;
 $wgGroupPermissions['*']['writeapi']        = false;
 $wgGroupPermissions['*']['createpage']      = false;
@@ -146,25 +146,26 @@ $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$f
 
 ##Default skin: you can change the default skin. Use the internal symbolic
 ## names, e.g. 'vector' or 'monobook':
-$wgDefaultSkin = "timeless";
-
+$wgDefaultSkin = "timeless"; 
 # Enabled skins.
 # The following skins were automatically enabled:
-wfLoadSkin( 'MinervaNeue' );
-wfLoadSkin( 'MonoBook' );
 wfLoadSkin( 'Timeless' );
-wfLoadSkin( 'Vector' );
-
-
+$wgDefaultSkin = 'timeless';
 # End of automatically generated settings.
 # Add more configuration options below.
+wfLoadExtension( 'Gadgets' );
+$wgAllowUserCss = true;
 
+$wgAllowUserJs = true;
 wfLoadExtension( 'VisualEditor' );
 wfLoadExtension( 'MultimediaViewer' );
 wfLoadExtension( 'ParserFunctions' );
+wfLoadExtension( 'PageOwnership' );
+
 ## wfLoadExtension( 'TemplateStyles' );
 ## wfLoadExtension( 'HeaderTabs' );
 ## wfLoadExtension( 'AccessControl' );
-
-$wgGroupPermissions['sysop']['editinterface'] = true;
+$wgDarkModeTogglePosition = 'personal'; // default
+$wgGroupPermissions['user']['editsitecss'] = true;
+$wgGroupPermissions['user']['editsitejs'] = true;
 unset( $wgFooterIcons['poweredby'] );

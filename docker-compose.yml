@@ -17,4 +17,5 @@ services:
       - database
     volumes:
       - ./mediawiki_data:/var/www/html/images
-      - ./LocalSettings.php:/var/www/html/LocalSettings.php  
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php 
+      - ./extensions/PageOwnership:/var/www/html/extensions/PageOwnership   

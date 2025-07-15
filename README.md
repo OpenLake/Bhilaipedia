@@ -1,7 +1,12 @@
- 
-# Bhilaipedia
+ <div style="display:flex;justify-content:center">
+  <h1>Bhilaipedia</h1>
+  <ul>
+</div>
 
 Bhilaipedia is a collaborative knowledge platform powered by **MediaWiki** and **MySQL**, containerized using **Docker**. This project includes an initial SQL backup, allowing you to restore and continue development instantly.
+
+
+## Documentations: [Link](/Docs/docs.md)
 
 ---
 
@@ -161,9 +166,9 @@ gunzip -c database_backup.sql.gz | docker exec -i (docker ps -qf "name=database"
 After any significant edit to the wiki, back it up using:
 
 ```bash
-docker exec $(docker ps -qf "name=database") \
-  mysqldump -u bhilaipedia -pbhilaipedia --no-tablespaces \
-  --single-transaction --default-character-set=utf8 bhilaipedia | gzip > database_backup.sql.gz
+win_backup.ps1 # for windows
+linux_backup.bash # for linux
+
 ```
 
 ### 📥 To Restore Again

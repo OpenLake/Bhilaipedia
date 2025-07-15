@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bachounda",
+			"Hubaishan",
+			"Meno25",
+			"ديفيد"
+		]
+	},
+	"darkmode-desc": "وضع داكن يمكن تبديله لواجهة مستخدم ميدياويكي",
+	"darkmode-link": "الوضع الداكن",
+	"darkmode-link-tooltip": "عطِّل الوضع الداكن",
+	"darkmode-default-link": "الوضع الافتراضي",
+	"darkmode-default-link-tooltip": "عطِّل الوضع الداكن"
+}

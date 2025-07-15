@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hedda",
+			"Mirzali",
+			"SaldırganSincap"
+		]
+	},
+	"darkmode-desc": "MediaWiki kullanıcı arayüzü için değiştirilebilen koyu modu",
+	"darkmode-link": "Koyu modu",
+	"darkmode-link-tooltip": "Koyu modunu aç",
+	"darkmode-default-link": "Varsayılan mod",
+	"darkmode-default-link-tooltip": "Koyu modunu kapat"
+}

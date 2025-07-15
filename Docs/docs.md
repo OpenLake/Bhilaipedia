@@ -1,6 +1,6 @@
 
  <div style="display:flex;justify-content:center">
-  <h1> MediaWiki Deployment Documentation</h1>
+  <h1> Bhilaipedia Deployment Documentation</h1>
   <ul>
 </div>
 
@@ -142,67 +142,83 @@ To create new gadgets:
 - Article path: `/index.php/$1`
 - Script path: `/`
 - API endpoint: `/api.php`
-- REST endpoint: `/rest.php`
+- REST endpoint: `/rest.php` 
 
-Key Features & Access Points
-1. PageOwnership Extension
-Purpose: Controls page editing permissions based on ownership
-Access Points:
+## Key Features & Access Points
 
-Special:PageOwnership - http://localhost:8080/index.php/Special:PageOwnership
+### 1. PageOwnership Extension
+**Purpose**: Controls page editing permissions based on ownership  
+**Access Points**:
+- Special:PageOwnership - `http://localhost:8080/index.php/Special:PageOwnership`
+- Management Interface - `http://localhost:8080/index.php/Special:PageOwnershipAdmin`
 
-Management Interface - http://localhost:8080/index.php/Special:PageOwnershipAdmin
+**Key Functions**:
+- Assign owners to pages
+- Restrict edits to owners/groups
+- Configure inheritance rules
 
-Key Functions:
+---
 
-Assign owners to pages
+### 2. Gadgets System
+**Access Points**:
+- Gadget definitions - `http://localhost:8080/index.php/MediaWiki:Gadgets-definition`
+- User preferences - `http://localhost:8080/index.php/Special:Preferences#mw-prefsection-gadgets`
 
-Restrict edits to owners/groups
+**Example Gadget Setup**:
+1. Define in Gadgets-definition:
+   ```mediawiki
+   * MyTool[ResourceLoader|default]|mytool.js|mytool.css
+   ```
+2. Create JS/CSS pages:
+   - `http://localhost:8080/index.php/MediaWiki:Gadget-mytool.js`
+   - `http://localhost:8080/index.php/MediaWiki:Gadget-mytool.css`
 
-Configure inheritance rules
+---
 
-2. Gadgets System
-Access Points:
-
-Gadget definitions - http://localhost:8080/index.php/MediaWiki:Gadgets-definition
-
-User preferences - http://localhost:8080/index.php/Special:Preferences#mw-prefsection-gadgets
-
-Example Gadget Setup:
-
-Define in Gadgets-definition:
-
-mediawiki
-* MyTool[ResourceLoader|default]|mytool.js|mytool.css
-Create JS/CSS pages:
-
-http://localhost:8080/index.php/MediaWiki:Gadget-mytool.js
-
-http://localhost:8080/index.php/MediaWiki:Gadget-mytool.css
-
-3. Template System
-Infobox Template Example:
-
-mediawiki
+### 3. Template System
+**Infobox Template Example**:
+```mediawiki
 {{Infobox_Institute
 | name = 
 | logo = 
 | established = 
 | type = 
 }}
-Access Points:
+```
+**Access Points**:
+- Template page - `http://localhost:8080/index.php/Template:Infobox_Institute`
+- Template documentation - `http://localhost:8080/index.php/Template:Infobox_Institute/doc`
 
-Template page - http://localhost:8080/index.php/Template:Infobox_Institute
+---
 
-Template documentation - http://localhost:8080/index.php/Template:Infobox_Institute/doc
+### 4. Media Management
+**Access Points**:
+- File upload - `http://localhost:8080/index.php/Special:Upload`
+- File list - `http://localhost:8080/index.php/Special:NewFiles`
+- Media search - `http://localhost:8080/index.php/Special:MediaSearch`
 
-4. Media Management
-Access Points:
+---
 
-File upload - http://localhost:8080/index.php/Special:Upload
+## Essential Extensions
 
-File list - http://localhost:8080/index.php/Special:NewFiles
+| Extension       | Purpose                          | Access Point |
+|-----------------|----------------------------------|--------------|
+| VisualEditor    | WYSIWYG editing                 | Available on all edit pages |
+| ParserFunctions | Enhanced template logic         | Automatically available in templates |
+| MultimediaViewer| Enhanced media display          | Activates when viewing images |
 
-Media search - http://localhost:8080/index.php/Special:MediaSearch
+---
 
-This documentation provides a comprehensive overview of the MediaWiki deployment, its configuration, and the extensions that enhance its functionality. For additional customization, refer to the specific extension documentation and MediaWiki's official manuals.
+## Skin Configuration
+**Timeless Skin**:
+- Mobile-responsive design
+- Customization: `http://localhost:8080/index.php/MediaWiki:Timeless.css`
+
+---
+
+## API Endpoints
+- Main API: `http://localhost:8080/api.php`
+- REST API: `http://localhost:8080/rest.php`
+- Action API docs: `http://localhost:8080/index.php/Special:ApiHelp`
+ 
+This documentation provides a comprehensive overview of the Bhilaipedia deployment, its configuration, and the extensions that enhance its functionality. For additional customization, refer to the specific extension documentation and MediaWiki's official manuals.

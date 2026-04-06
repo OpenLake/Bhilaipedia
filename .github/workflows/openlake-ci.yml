@@ -8,9 +8,6 @@ on:
   pull_request:
     branches: [main, master, develop]
     types: [opened, synchronize, reopened]
-  push:
-    branches: [main, master]
-    # Only run on main for status checks, never auto-merge without PR review
 
 # Prevent multiple concurrent workflows on same PR
 concurrency:
@@ -22,7 +19,7 @@ jobs:
   # SECURITY SCANNING
   # ==============================
   security:
-    name: 🔒 Security Scan
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -48,7 +45,8 @@ jobs:
           fi
           # Go
           if [ -f "go.mod" ]; then
-            go list -m -json all | govulncheck || true
+            go install golang.org/x/vuln/cmd/govulncheck@latest
+            govulncheck ./...
           fi
         continue-on-error: true
 
@@ -56,7 +54,7 @@ jobs:
   # CODE QUALITY
   # ==============================
   code-quality:
-    name: 🧹 Code Quality
+    name: Code Quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -101,7 +99,7 @@ jobs:
   # BUILD & TEST
   # ==============================
   build-test:
-    name: 🔨 Build & Test
+    name: Build & Test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -124,14 +122,17 @@ jobs:
       - name: Install Python dependencies
         if: hashFiles('requirements.txt') != '' || hashFiles('setup.py') != '' || hashFiles('pyproject.toml') != ''
         run: |
-          pip install -r requirements.txt || true
-          pip install pytest pytest-cov || true
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          elif [ -f "pyproject.toml" ] || [ -f "setup.py" ]; then
+            pip install .
+          fi
+          pip install pytest pytest-cov
 
       - name: Run Python tests
         if: hashFiles('requirements.txt') != '' || hashFiles('setup.py') != '' || hashFiles('pyproject.toml') != ''
         run: |
-          pytest --cov=. --cov-report=xml || echo "Tests failed or none found"
-        continue-on-error: true
+          pytest --cov=. --cov-report=xml
 
       # ==========================
       # Node.js
@@ -149,13 +150,11 @@ jobs:
 
       - name: Run Node.js tests
         if: hashFiles('package.json') != ''
-        run: npm test || echo "Tests failed or none found"
-        continue-on-error: true
+        run: npm test
 
       - name: Build check
         if: hashFiles('package.json') != ''
-        run: npm run build || echo "Build failed or no build script"
-        continue-on-error: true
+        run: npm run build
 
       # ==========================
       # Go
@@ -174,13 +173,11 @@ jobs:
       - name: Run Go tests
         if: hashFiles('go.mod') != ''
         run: |
-          go test -v -coverprofile=coverage.out ./... || echo "Go tests failed or none found"
-        continue-on-error: true
+          go test -v -coverprofile=coverage.out ./...
 
       - name: Build Go binary
         if: hashFiles('go.mod') != ''
-        run: go build -v ./... || echo "Go build failed"
-        continue-on-error: true
+        run: go build -v ./...
 
       # ==========================
       # Rust
@@ -191,13 +188,11 @@ jobs:
 
       - name: Run Rust tests
         if: hashFiles('Cargo.toml') != ''
-        run: cargo test || echo "Rust tests failed or none found"
-        continue-on-error: true
+        run: cargo test
 
       - name: Build Rust binary
         if: hashFiles('Cargo.toml') != ''
-        run: cargo build || echo "Rust build failed"
-        continue-on-error: true
+        run: cargo build
 
       # ==========================
       # Flutter
@@ -216,12 +211,34 @@ jobs:
 
       - name: Run Flutter tests
         if: hashFiles('pubspec.yaml') != ''
-        run: flutter test || echo "Flutter tests failed or none found"
-        continue-on-error: true
+        run: flutter test
 
       - name: Analyze Flutter code
         if: hashFiles('pubspec.yaml') != ''
-        run: flutter analyze || echo "Flutter analysis issues found"
-        continue-on-error: true
+        run: flutter analyze
 
   # ==============================
+  # PR STATUS COMMENT
+  # ==============================
+  comment-status:
+    name: Comment CI Status
+    if: github.event_name == 'pull_request'
+    needs: [security, code-quality, build-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post status summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              '## OpenLake CI Result',
+              `- Security: **${{ needs.security.result }}**`,
+              `- Code Quality: **${{ needs['code-quality'].result }}**`,
+              `- Build & Test: **${{ needs['build-test'].result }}**`
+            ].join('\n');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
